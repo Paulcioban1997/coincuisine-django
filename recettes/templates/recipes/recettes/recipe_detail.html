@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <article class="recipe-full">
+        <h2>{{ object.title }}</h2>
+        <p><em>Par {{ object.author.username }} le {{ object.created_at|date:"d F Y" }}</em></p>
+
+        {% if object.author == user %}
+            <a href="{% url 'recipe_update' pk=object.pk %}">Modifier</a>
+            <a href="{% url 'recipe_delete' pk=object.pk %}">Supprimer</a>
+        {% endif %}
+
+        <h4>Description</h4>
+        <p>{{ object.description }}</p>
+        <h4>Ingrédients</h4>
+        <p>{{ object.ingredients|linebreaks }}</p>
+        <h4>Instructions</h4>
+        <p>{{ object.instructions|linebreaks }}</p>
+
+        <div class="mb-3">
+          <strong>Note :</strong>
+          <form method="post" style="display:inline;">
+            {% csrf_token %}
+            {% for i in "12345" %}
+              <button name="rating" value="{{ i }}" type="submit" style="background:none; border:none; padding:0; cursor:pointer;">
+                {% if i|int <= object.rating %}
+                  <span style="color: gold; font-size: 1.5em;">&#9733;</span>
+                {% else %}
+                  <span style="color: #bbb; font-size: 1.5em;">&#9733;</span>
+                {% endif %}
+              </button>
+            {% endfor %}
+          </form>
+        </div>
+    </article>
+
+    <hr>
+
+    <div style="display: flex; justify-content: flex-end; margin-top: 30px;">
+      <button class="btn" id="toggleCommentsBtn" style="font-weight: bold; font-size: 1.1em; background: #ff8700; color: #fff;">Commentaires</button>
+    </div>
+    <section class="comments" id="commentsSection" style="background: #fff; border-radius: 10px; padding: 24px 18px; margin-top: 10px; display: none;">
+        <h3 style="color: #ff8700; font-size: 2em; font-weight: bold; text-shadow: 1px 1px 0 #fff3e0, 0 2px 8px #ff870055; letter-spacing: 1px;">Comments</h3>
+        {% for comment in object.comment_set.all %}
+            <div class="comment" style="background: #f7f7f7; border-radius: 7px; margin-bottom: 14px; padding: 10px 14px;">
+                <p style="margin-bottom: 4px;"><strong>{{ comment.author.username }}</strong> le {{ comment.created_at|date:"d/m/Y" }}</p>
+                <p style="margin-bottom: 0;">{{ comment.body|linebreaks }}</p>
+            </div>
+        {% empty %}
+            <p style="color: #ff8700; font-weight: bold;">No comments yet.</p>
+        {% endfor %}
+
+        {% if user.is_authenticated %}
+            <h4 style="margin-top: 18px; color: #ff8700;">Ajouter un commentaire</h4>
+            <form method="post">
+                 {% csrf_token %}
+                 <div class="mb-3">
+                   <label class="form-label" style="color: #ff8700;">Commentaire :</label>
+                   {{ comment_form.content|as_widget:attrs }}
+                 </div>
+                 <button type="submit" class="btn btn-warning">Envoyer</button>
+            </form>
+        {% else %}
+            <p><a href="{% url 'login' %}">Connectez-vous</a> pour laisser un commentaire.</p>
+        {% endif %}
+    </section>
+    <script>
+      const toggleBtn = document.getElementById('toggleCommentsBtn');
+      const commentsSection = document.getElementById('commentsSection');
+      if (toggleBtn && commentsSection) {
+        toggleBtn.addEventListener('click', function() {
+          if (commentsSection.style.display === 'none') {
+            commentsSection.style.display = 'block';
+            toggleBtn.textContent = 'Masquer les commentaires';
+          } else {
+            commentsSection.style.display = 'none';
+            toggleBtn.textContent = 'Commentaires';
+          }
+        });
+      }
+    </script>
+{% endblock content %}

@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-14 19:58-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\recettes\templates\recipes\liste_recettes.html:5
+#: .\recettes\templates\recipes\recettes\liste_recettes.html:7
+msgid "Liste des Recettes"
+msgstr ""
+
+#: .\recettes\templates\recipes\liste_recettes.html:8
+msgid "Rechercher une recette..."
+msgstr ""
+
+#: .\recettes\templates\recipes\recettes\base.html:6
+msgid "Coin-Cuisine 🍲"
+msgstr ""
+
+#: .\recettes\templates\recipes\recettes\base.html:27
+msgid "Coin-Cuisine 🍽️"
+msgstr ""
+
+#: .\recettes\templates\recipes\recettes\base.html:36
+msgid "Menu"
+msgstr ""
+
+#: .\recettes\templates\recipes\recettes\base.html:38
+msgid "Liste des recettes"
+msgstr ""
+
+#: .\recettes\templates\recipes\recettes\liste.html:4
+msgid "Coin-Cuisine"
+msgstr ""
+
+#: .\recettes\templates\recipes\recettes\liste_recettes.html:9
+msgid "Rechercher..."
+msgstr ""
+
+#: .\recettes\templates\recipes\recettes\liste_recettes.html:23
+#: .\recettes\templates\recipes\recettes\liste_recettes.html:41
+msgid "Burger le Cheval à 600HP"
+msgstr ""
+msgid "Liste des Recettes"
+msgstr "Recipe List"
+
+#: .\recettes\templates\recipes\recettes\liste_recettes.html:25
+#: .\recettes\templates\recipes\recettes\liste_recettes.html:43
+msgid "Rechercher une recette..."
+msgstr "Search for a recipe..."
+msgid "Poutine"
+msgstr ""
+
+msgid "Coin-Cuisine 🍲"
+msgstr "Coin-Cuisine 🍲"
+#: .\recettes\templates\registration\login.html:8
+msgid "Vous êtes déjà connecté !"
+msgstr "You are already logged in!"
+msgid "Coin-Cuisine 🍽️"
+msgstr "Coin-Cuisine 🍽️"
+
+#: .\recettes\templates\registration\login.html:9
+#, python-format
+msgid "Menu"
+msgstr "Menu"
+msgid "Vous êtes déjà authentifié en tant que <b>%(user.username)s</b>."
+msgstr "You are already authenticated as <b>%(user.username)s</b>."
+
+msgid "Liste des recettes"
+msgstr "Recipe List"
+#: .\recettes\templates\registration\login.html:12
+msgid "Se déconnecter"
+msgstr "Log out"
+msgid "Coin-Cuisine"
+msgstr "Coin-Cuisine"
+
+#: .\recettes\templates\registration\login.html:14
+msgid "Retour à l'accueil"
+msgid "Rechercher..."
+msgstr "Search..."
+msgstr "Back to home"
+
+#: .\recettes\templates\registration\login.html:20
+#: .\recettes\templates\registration\login.html:25
+msgid "Burger le Cheval à 600HP"
+msgstr "Burger le Cheval at 600HP"
+msgid "Connexion"
+msgstr "Login"
+
+#: .\recettes\templates\registration\login.html:21
+msgid "Poutine"
+msgstr "Poutine"
+msgid "Bienvenue sur le site de recettes inspiré par la passion automobile !"
+msgstr "Welcome to the car-inspired recipe site!"
+
+#: .\recettes\templates\registration\login.html:28
+msgid "Mot de passe oublié ?"
+msgstr "Forgot password?"
+
+#: .\recettes\templates\registration\login.html:29
+msgid "S'inscrire"
+msgstr "Sign up"

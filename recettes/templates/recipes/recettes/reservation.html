@@ -1,0 +1,21 @@
+{% extends 'recipes/recettes/base.html' %}
+{% block content %}
+<div class="container mt-5" style="max-width:500px;">
+  <h2 class="mb-4" style="color: orange;">Réservation en ligne</h2>
+  {% if success %}
+    <div class="alert alert-success">Votre réservation a bien été enregistrée !</div>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="mb-3"><span style="color: orange;">{{ form.name.label_tag }}</span>{{ form.name }}</div>
+    <div class="mb-3"><span style="color: orange;">{{ form.age.label_tag }}</span>{{ form.age }}</div>
+    <div class="mb-3"><span style="color: orange;">{{ form.phone.label_tag }}</span>{{ form.phone }}</div>
+    <div class="mb-3"><span style="color: orange;">{{ form.email.label_tag }}</span>{{ form.email }}</div>
+    <div class="mb-3"><span style="color: orange;">{{ form.hour.label_tag }}</span>{{ form.hour }}</div>
+    <div class="mb-3"><span style="color: orange;">{{ form.location.label_tag }}</span>{{ form.location }}</div>
+    <div class="form-check mb-3">{{ form.confirm }} <span style="color: orange;">{{ form.confirm.label_tag }}</span></div>
+    <button type="submit" class="btn btn-primary">Réserver</button>
+  </form>
+</div>
+{% endblock %}

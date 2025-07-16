@@ -1,0 +1,21 @@
+{% load static recette_extras %}
+<ul class="list-group">
+    {% for recipe in object_list %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            {% if recipe.image %}
+                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" width="80" height="80" class="rounded me-3">
+            {% else %}
+                <img src="{% static 'images/default-recipe.jpg' %}" alt="Default image" width="80" height="80" class="rounded me-3">
+            {% endif %}
+            <a href="{% url 'recipe_detail' recipe.pk %}" class="text-decoration-none fw-bold fs-5">
+                {{ recipe.title }}
+                <span class="badge bg-success ms-2">11.99&nbsp;$</span>
+            </a>
+        </div>
+        <span class="badge bg-secondary">{{ recipe.created_at|date:"d M Y" }}</span>
+    </li>
+    {% empty %}
+    <li class="list-group-item">Aucune recette trouvée 😢</li>
+    {% endfor %}
+</ul>

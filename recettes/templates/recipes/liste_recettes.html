@@ -1,0 +1,89 @@
+{% load recette_extras %}
+{% extends 'recipes/recettes/base.html' %}
+{% block content %}
+  <div class="container mt-5">
+    <h1>{% trans "Liste des Recettes" %}</h1>
+    <form method="get" action="" style="max-width: 400px; margin-bottom: 24px;">
+      <div class="input-group">
+        <input type="text" name="q" id="searchInput" class="form-control" placeholder="{% trans 'Rechercher une recette...' %}" autocomplete="off">
+        <span class="input-group-text" style="background: #ff8700; color: #fff;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85zm-5.242 1.106a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/>
+          </svg>
+        </span>
+      </div>
+    </form>
+    <div class="row" id="recipesList">
+      {% for recipe in object_list %}
+        <div class="col-md-4 mb-4 recipe-card" data-title="{{ recipe.title|lower }}" data-description="{{ recipe.description|lower }}">
+          <div class="card h-100">
+            {% if recipe.image %}
+              <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ recipe.title }}</h5>
+              <p class="card-text">{{ recipe.description|truncatewords:20 }}</p>
+              <a href="{% url 'recipe_detail' recipe.pk %}" class="btn btn-primary">Voir la recette</a>
+              {# Commentaires section removed from menu/list view as requested #}
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p>Aucune recette trouvée.</p>
+      {% endfor %}
+    </div>
+    <a href="{% url 'ajouter_recette' %}" class="btn btn-success mt-3">Ajouter une recette</a>
+  </div>
+    <script>
+    const searchInput = document.getElementById('searchInput');
+    const recipeCards = document.querySelectorAll('.recipe-card');
+    searchInput.addEventListener('keyup', function() {
+      const query = this.value.trim().toLowerCase();
+      recipeCards.forEach(card => {
+        const title = card.getAttribute('data-title');
+        const description = card.getAttribute('data-description');
+        if (title.includes(query) || description.includes(query)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+
+    // Comment AJAX
+    document.querySelectorAll('.comment-form').forEach(form => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const recipeId = this.getAttribute('data-recipe');
+        const input = this.querySelector('input[name="content"]');
+        const content = input.value.trim();
+        if (!content) return;
+        fetch(`/recipes/${recipeId}/add_comment/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          },
+          body: JSON.stringify({ content })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const ul = document.getElementById(`comments-list-${recipeId}`);
+            const noComment = document.getElementById(`no-comment-${recipeId}`);
+            if (noComment) noComment.remove();
+            const li = document.createElement('li');
+            li.style.background = '#fff7ed';
+            li.style.borderRadius = '7px';
+            li.style.margin = '6px 0';
+            li.style.padding = '6px 10px';
+            li.style.color = '#333';
+            li.innerHTML = `<strong style='color:#ff8700;'>${data.author}</strong> : ${data.content}`;
+            ul.appendChild(li);
+            input.value = '';
+          }
+        });
+      });
+    });
+  </script>
+{% endblock %}

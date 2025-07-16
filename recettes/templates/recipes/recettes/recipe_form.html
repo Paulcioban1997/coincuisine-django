@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if object %}
+        <h2>Modifier la recette</h2>
+    {% else %}
+        <h2>Créer une nouvelle recette</h2>
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Sauvegarder</button>
+    </form>
+{% endblock content %} 

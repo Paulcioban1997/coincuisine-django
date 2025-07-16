@@ -1,0 +1,19 @@
+runtime: python310
+
+entrypoint: gunicorn -b :$PORT coincuisine.wsgi
+
+env_variables:
+  DJANGO_SETTINGS_MODULE: 'coincuisine.settings'
+  GOOGLE_APPLICATION_CREDENTIALS: 'chemin/vers/ta-cle.json'  # Remplace par le chemin réel de ta clé de service
+  DB_NAME: "coincuisine"           # Remplacez par le nom réel de votre base
+  DB_USER: "postgres"              # Remplacez par l'utilisateur réel
+  DB_PASSWORD: "votre_mot_de_passe" # Remplacez par le mot de passe réel
+  # Ajoutez ici d'autres variables si besoin
+
+handlers:
+  - url: /static
+    static_dir: static
+  - url: /media
+    static_dir: media
+  - url: /.*
+    script: auto

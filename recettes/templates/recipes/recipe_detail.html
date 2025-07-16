@@ -1,0 +1,102 @@
+{% extends 'recipes/recettes/base.html' %}
+{% load recette_extras %}
+{% block content %}
+  <div class="container mt-5">
+    <div class="card">
+      <div class="card-body">
+        {% with normalized_title=object.title|lower|cut:"à"|cut:"â"|cut:"é"|cut:"è"|cut:"ê"|cut:"ë"|cut:"î"|cut:"ï"|cut:"ô"|cut:"ö"|cut:"ù"|cut:"û"|cut:"ü"|cut:"ç"|cut:"œ"|cut:"æ" %}
+        {% with normalized_title_nospace=normalized_title|cut:" " %}
+        <h2 class="card-title">{{ object.title }}
+          {% if normalized_title == 'polenta' or normalized_title_nospace == 'polentaavecfromageetcremesure' %}
+            <span class="badge bg-success ms-2">11.99&nbsp;$</span>
+          {% elif normalized_title == 'poutine' %}
+            <span class="badge bg-success ms-2">9.99&nbsp;$</span>
+          {% elif normalized_title == 'burger le cheval a 600hp' %}
+            <span class="badge bg-success ms-2">12.99&nbsp;$</span>
+          {% endif %}
+        </h2>
+        {% endwith %}
+        {% endwith %}
+        {% if object.image %}
+          <img src="{{ object.image.url }}" class="img-fluid mb-3" alt="{{ object.title }}"
+            style="display:block; margin:0 auto 16px auto; max-width:220px; max-height:160px; object-fit:cover; border-radius:10px;">
+        {% endif %}
+        <p class="card-text">{{ object.description }}</p>
+        <p class="card-text"><strong>Author:</strong> {{ object.author }}</p>
+        <p class="card-text"><strong>Created:</strong> {{ object.created_at }}</p>
+        <div class="mb-3">
+          <strong>Note :</strong>
+          <form method="post" style="display:inline;">
+            {% csrf_token %}
+            {% for i in "12345" %}
+              <button name="rating" value="{{ i }}" type="submit" style="background:none; border:none; padding:0; cursor:pointer;">
+                {% if i|to_int <= object.rating %}
+                  <span style="color: gold; font-size: 1.5em;">&#9733;</span>
+                {% else %}
+                  <span style="color: #bbb; font-size: 1.5em;">&#9733;</span>
+                {% endif %}
+              </button>
+            {% endfor %}
+          </form>
+        </div>
+        <hr>
+        <h4 style="color:#ff8700;">Étapes de la recette</h4>
+        <div id="steps-container">
+          <!-- Les étapes seront injectées ici -->
+        </div>
+        <div style="margin-top:15px;">
+          <button id="prev-step" class="btn btn-outline-secondary btn-sm" style="display:none;">Étape précédente</button>
+          <button id="next-step" class="btn btn-warning btn-sm">Étape suivante</button>
+        </div>
+        <script>
+          const instructions = `{{ object.instructions|linebreaksbr|escapejs }}`.split(/<br\s*\/?>(?:\s*\d+\.|\s*-)?/).filter(s => s.trim().length > 0);
+          let currentStep = 0;
+          const stepsContainer = document.getElementById('steps-container');
+          const nextBtn = document.getElementById('next-step');
+          const prevBtn = document.getElementById('prev-step');
+          function showStep(idx) {
+            stepsContainer.innerHTML = `<div style='font-size:1.2em; color:#fff; background:#222; border-radius:8px; padding:18px 20px; min-height:80px;'>${instructions[idx]}</div><div style='color:#ffb300; font-size:0.95em; margin-top:8px;'>Étape ${idx+1} / ${instructions.length}</div>`;
+            prevBtn.style.display = idx > 0 ? '' : 'none';
+            nextBtn.textContent = idx < instructions.length-1 ? 'Étape suivante' : 'Terminé';
+          }
+          nextBtn.onclick = () => {
+            if(currentStep < instructions.length-1) { currentStep++; showStep(currentStep); }
+          };
+          prevBtn.onclick = () => {
+            if(currentStep > 0) { currentStep--; showStep(currentStep); }
+          };
+          showStep(currentStep);
+        </script>
+        <div class="d-flex gap-2 mt-3">
+          <a href="{% url 'recipe_list' %}" class="btn btn-secondary">Back to Recipes</a>
+          {% if user.is_authenticated and user == object.author %}
+            <a href="{% url 'recipe_update' object.pk %}" class="btn btn-warning">Modifier</a>
+            <form method="post" action="{% url 'recipe_delete' object.pk %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cette recette ?');">Supprimer</button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <hr>
+    <h4 style="color: #ff8700;">Comments</h4>
+    {% for comment in object.comments.all|dictsortreversed:"created_at"|slice:":2" %}
+      <div class="mb-2" style="background:rgba(0,0,0,0.15); color:#fff; font-size:0.93em; border-radius:7px; padding:7px 12px;">
+        <strong>{{ comment.author }}</strong> <span style="font-size:0.85em; color:#ffb300;">({{ comment.created_at|date:'d M Y H:i' }})</span><br>
+        {{ comment.content }}
+      </div>
+    {% empty %}
+      <p style="color: #ff8700;">No comments yet.</p>
+    {% endfor %}
+    {% if user.is_authenticated %}
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Add Comment</button>
+      </form>
+    {% else %}
+      <p><a href="/login/">Log in</a> to comment.</p>
+    {% endif %}
+  </div>
+{% endblock %}

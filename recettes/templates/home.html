@@ -1,0 +1,27 @@
+{% extends 'recipes/recettes/base.html' %}
+{% block content %}
+<div class="text-center" style="margin-top:60px;">
+    <h1 class="display-4" style="color:#ff9800; font-weight:bold;">Bienvenue sur Coin-Cuisine 🍲</h1>
+    <p class="lead" style="color:#eee;">Découvrez et partagez vos recettes favorites inspirées par la passion automobile !</p>
+</div>
+<hr style="border-color:#ff9800;">
+<div class="row justify-content-center">
+    {% if recettes %}
+        {% for recette in recettes %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card shadow" style="border-radius:18px;">
+                <div class="card-body">
+                    <h5 class="card-title" style="color:#ff9800;">{{ recette.title }}</h5>
+                    <p class="card-text">{{ recette.description|truncatechars:120 }}</p>
+                    <a href="{% url 'recipe_detail' recette.pk %}" class="btn btn-outline-warning">Voir la recette</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <p class="text-muted">Aucune recette pour l’instant. Ajoutez-en une !</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% trans "Coin-Cuisine" %}</title>
+</head>
+<body>
+    <h1>Les recettes</h1>
+    {% for recette in recettes %}
+        <h2>{{ recette.titre }}</h2>
+        <p>{{ recette.description }}</p>
+        <p><strong>Ingrédients:</strong> {{ recette.ingredients }}</p>
+        <p><strong>Instructions:</strong> {{ recette.instructions }}</p>
+        <hr>
+    {% empty %}
+        <p>Aucune recette trouvée.</p>
+    {% endfor %}
+</body>
+</html>
